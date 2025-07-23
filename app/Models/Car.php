@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Car extends Model
 {
     use SoftDeletes;
-    //
+    protected $fillable = [];
+
+    // protected $guarded = ['user_id'];
 }
