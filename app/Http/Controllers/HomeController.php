@@ -3,19 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\CarFeatures;
+use App\Models\CarImage;
+use App\Models\CarType;
+use App\Models\Maker;
+use App\Models\Model;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $cars = Car::where('publised_at', '!=', 'null')
+        /* $cars = Car::where('published_at', '!=', 'null')
             ->orderBy('created_at')
             ->limit(20)
             ->get();
-        dump($cars);
+        dump($cars); */
 
-        $carData = [
+        /* $carData = [
             'maker_id' => 1,
             'model_id' => 1,
             'year' => 2024,
@@ -40,10 +47,34 @@ class HomeController extends Controller
         $car2->fill($carData);
         $car2->save(); */
 
-        //  Or
+        /*  Or
         $car3 = new Car($carData);
-        $car3->save();
+        $car3->save(); */
+
+        /* $cars = Car::where('price', '>', 20000)->get();
+        dump($cars);
+
+        Car::where('published_at', '=', null)
+            ->where('user_id', 1)
+            ->update(['published_at' => now()]); */
+
+        /* $car = Car::find(1);
+        dump($car->images); */
+
+        /* $maker = Maker::factory()->create();
+        dump($maker); */
+
+        /* Maker::factory()
+            ->count(5)
+            ->hasModels(3)
+            ->create(); */
+
+        /* User::factory()
+            ->has(Car::factory()->count(5), 'favouriteCars')
+            ->create(); */
 
         return view('home.index');
     }
 }
+
+

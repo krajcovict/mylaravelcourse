@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('models', function (Blueprint $table) {
             $table->id();
             $table->foreignId('maker_id')->constrained('makers');
-            $table->string('name');
+            $table->string('name', 45);
         });
     }
 
