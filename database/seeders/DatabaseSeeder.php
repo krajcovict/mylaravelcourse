@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 	        ['name' => 'SUV'],
 	        ['name' => 'Pickup Truck'],
             ['name' => 'Minivan'],
-            ['name' => 'Jeep'],
+            ['name' => 'Offroad'],
 	        ['name' => 'Coupe' ],
             ['name' => 'Crossover'],
 	        ['name' => 'Sports Car']
