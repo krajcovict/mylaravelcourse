@@ -8,32 +8,19 @@
                 >
                     <div class="find-a-car-inputs">
                         <div>
-                            <select>
-                                <option value="">Make</option>
-                                <option value="bmw">BMW</option>
-                                <option value="lexus">Lexus</option>
-                                <option value="mercedes">Mercedes</option>
-                            </select>
+                            <x-select-maker />
                         </div>
                         <div>
-                            <select>
-                                <option value="">Model</option>
-                            </select>
+                            <x-select-model />
                         </div>
                         <div>
-                            <select>
-                                <option value="">State/Region</option>
-                            </select>
+                            <x-select-state />
                         </div>
                         <div>
-                            <select>
-                                <option value="">City</option>
-                            </select>
+                            <x-select-city />
                         </div>
                         <div>
-                            <select>
-                                <option value="">Type</option>
-                            </select>
+                            <x-select-car-type />
                         </div>
                         <div>
                             <input type="number" placeholder="Year From" />
@@ -48,9 +35,7 @@
                             <input type="number" placeholder="Price To" />
                         </div>
                         <div>
-                            <select>
-                                <option value="">Fuel Type</option>
-                            </select>
+                            <x-select-fuel-type />
                         </div>
                     </div>
                     <div>
