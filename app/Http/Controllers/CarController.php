@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
@@ -34,7 +35,22 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $featuresData = $data['features'] ?? [];
+        $images = $request->file('images') ?? [];
+
+        $data['user_id'] = 1;
+
+        $car = Car::create($data);
+
+        $car->features()->create($featuresData);
+
+        foreach ($images as $i => $image) {
+            $path = $image->store('images');
+            $car->images()->create(['image_path' => $path, 'position' => $i + 1]);
+        }
+
+        return redirect()->route('car.index');
     }
 
     /**
@@ -42,6 +58,13 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+        /* if (!$car->published_at) {
+            abort(404);
+        } */
+        $publishedAt = $car->published_at ? Carbon::parse($car->published_at) : null;
+        if (!$publishedAt || $publishedAt->isAfter(today())) {
+            abort(404);
+        }
         return view('car.show', ['car' => $car]);
     }
 
