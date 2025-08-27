@@ -35,7 +35,26 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = $request->validate([
+            'maker_id' => 'required',
+            'model_id' => 'required',
+            'year' => 'required|integer|min:1900|max:'.date('Y'),
+            'car_type_id' => 'required|exists:car_types,id',
+            'price' => 'required|integer|min:10',
+            'vin' => 'required|string|size:17',
+            'mileage' => 'required|integer|min:0',
+            'fuel_type_id' => 'required|exists:fuel_types,id',
+            'city_id' => 'required|exists:cities,id',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|min:7|max:20',
+            'features' => 'array',
+            'features.*' => 'string',
+            'description' => 'nullable|string|max:3000',
+            'published_at' => 'nullable|date',
+            'images' => 'array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:9024',
+        ]);
+
         $featuresData = $data['features'] ?? [];
         $images = $request->file('images') ?? [];
 

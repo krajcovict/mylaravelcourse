@@ -24,6 +24,7 @@
                     type="checkbox"
                     name="features[{{ $key }}]"
                     value="1"
+                    @checked(array_key_exists($key, $attributes->get('value') ?: []))
                   />
                   {{ $feature }}
             </label>
