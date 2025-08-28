@@ -139,6 +139,11 @@
               </div>
             </div>
             <div class="form-images">
+                @foreach ($errors->get('images.*') as $imageErrors)
+                    @foreach ($imageErrors as $err)
+                        <div class="text-error mb-small">{{ $err }}</div>
+                    @endforeach
+                @endforeach
               <div class="form-image-upload">
                 <div class="upload-placeholder">
                   <svg

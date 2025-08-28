@@ -30,7 +30,7 @@
                             <td>{{ $car->published_at ? 'Yes' : 'No' }}</td>
                             <td class="">
                               <a
-                                href="edit_car.html"
+                                href="{{ route('car.edit', $car) }}"
                                 class="btn btn-edit inline-flex items-center"
                               >
                                 <svg

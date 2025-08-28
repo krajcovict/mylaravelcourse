@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCarRequest;
 use App\Models\Car;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
@@ -33,27 +35,9 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCarRequest $request)
     {
-        $data = $request->validate([
-            'maker_id' => 'required',
-            'model_id' => 'required',
-            'year' => 'required|integer|min:1900|max:'.date('Y'),
-            'car_type_id' => 'required|exists:car_types,id',
-            'price' => 'required|integer|min:10',
-            'vin' => 'required|string|size:17',
-            'mileage' => 'required|integer|min:0',
-            'fuel_type_id' => 'required|exists:fuel_types,id',
-            'city_id' => 'required|exists:cities,id',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|min:7|max:20',
-            'features' => 'array',
-            'features.*' => 'string',
-            'description' => 'nullable|string|max:3000',
-            'published_at' => 'nullable|date',
-            'images' => 'array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:9024',
-        ]);
+        $data = $request->validated();
 
         $featuresData = $data['features'] ?? [];
         $images = $request->file('images') ?? [];
@@ -186,7 +170,6 @@ class CarController extends Controller
         ->paginate(15);
 
         return view('car.watchlist', ['cars' => $cars]);
-
 
     }
 }
