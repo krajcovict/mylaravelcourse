@@ -30,6 +30,7 @@ class StoreCarRequest extends FormRequest
             'vin' => 'nullable|string|size:17',
             'mileage' => 'required|integer|min:0',
             'fuel_type_id' => 'required|exists:fuel_types,id',
+            'state_id' => 'required|exists:states,id',
             'city_id' => 'required|exists:cities,id',
             'address' => 'nullable|string|max:255',
             'phone' => 'required|string|min:7|max:20',

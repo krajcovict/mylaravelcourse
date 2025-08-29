@@ -1,3 +1,5 @@
+@props(['car' => null])
+
 @php
     $features = [
         "abs" => "ABS",
@@ -24,7 +26,7 @@
                     type="checkbox"
                     name="features[{{ $key }}]"
                     value="1"
-                    @checked(array_key_exists($key, $attributes->get('value') ?: []))
+                    @checked(old('features.'.$key, $car?->features->$key))
                   />
                   {{ $feature }}
             </label>

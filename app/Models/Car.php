@@ -77,7 +77,7 @@ class Car extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(CarImage::class);
+        return $this->hasMany(CarImage::class)->orderBy('position');
     }
 
 
@@ -90,4 +90,10 @@ class Car extends Model
     {
         return (new Carbon($this->created_at))->format('Y-m-d');
     }
+
+    public function getTitle(): string
+    {
+        return $this->year . ' - ' . $this->maker->name . ' ' . $this->model->name;
+    }
+
 }
