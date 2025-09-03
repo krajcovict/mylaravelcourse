@@ -1,4 +1,4 @@
-@props(['title' => '', 'bodyClass' => ''])
+@props(['title' => '', 'bodyClass' => '', 'socialAuth' => true])
 
 <x-base-layout :$title :$bodyClass>
         <main>
@@ -10,12 +10,21 @@
                             <img src="/img/logoipsum-265.svg" alt="" />
                         </a>
                     </div>
+                    @session('success')
+                            <div class="success-message">
+                                {{ session('success') }}
+                            </div>
+                    @endsession
                     {{ $slot }}
-                    <div class="grid grid-cols-2 gap-1 social-auth-buttons">
-                        <x-google-button />
-                        <x-fb-button />
-                    </div>
-                    {{ $footerLink }}
+                    @if ($socialAuth)
+                        <div class="grid grid-cols-2 gap-1 social-auth-buttons">
+                            <x-google-button />
+                            <x-fb-button />
+                        </div>
+                    @endif
+                    @isset($footerLink)
+                        {{ $footerLink }}
+                    @endisset
                 </div>
                 <div class="auth-page-image">
                     <img src="/img/car-png-39071.png" alt="" class="img-responsive" />

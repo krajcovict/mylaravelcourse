@@ -14,9 +14,12 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        /* $user = $request->session()->get('user');
+        $user2 = $session('user');
 
+        session(['user' => 'John']); */
 
         $cars = Car::with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage'])
             ->where('published_at', '<', now())

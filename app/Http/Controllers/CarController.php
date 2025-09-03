@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCarRequest;
 use App\Models\Car;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +14,12 @@ class CarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cars = User::find(1)
+        /* $success = $request->session()->get('success');
+        dump($success); */
+
+        $cars = $request->user()
             ->cars()
             ->with(['primaryImage', 'maker', 'model'])
             ->orderBy("created_at", "desc")
@@ -43,8 +45,9 @@ class CarController extends Controller
         $featuresData = $data['features'] ?? [];
         $images = $request->file('images') ?? [];
 
-        $data['user_id'] = 1;
+        $data['user_id'] = Auth::id();
 
+        // Create new car
         $car = Car::create($data);
 
         $car->features()->create($featuresData);
@@ -54,7 +57,7 @@ class CarController extends Controller
             $car->images()->create(['image_path' => $path, 'position' => $i + 1]);
         }
 
-        return redirect()->route('car.index');
+        return redirect()->route('car.index')->with('success', 'Car was created!');
     }
 
     /**
@@ -62,9 +65,6 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        /* if (!$car->published_at) {
-            abort(404);
-        } */
         $publishedAt = $car->published_at ? Carbon::parse($car->published_at) : null;
         if (!$publishedAt || $publishedAt->isAfter(today())) {
             abort(404);
@@ -77,6 +77,9 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
+        if ($car->user_id !== Auth::id()) {
+            abort(403);
+        }
         return view('car.edit', ['car' => $car]);
     }
 
@@ -85,6 +88,10 @@ class CarController extends Controller
      */
     public function update(StoreCarRequest $request, Car $car)
     {
+        if ($car->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $data = $request->validated();
 
         $features = array_merge([
@@ -105,7 +112,9 @@ class CarController extends Controller
         $car->update($data);
         $car->features()->update($features);
 
-        return redirect()->route('car.index');
+        // $request->session()->flash('success', 'Car was updated!');
+
+        return redirect()->route('car.index')->with('success', 'Car was updated!');
     }
 
     /**
@@ -113,12 +122,16 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+        if ($car->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $car->delete();
         if ($car->features) {
             $car->features->delete();
         }
 
-        return redirect()->route('car.index');
+        return redirect()->route('car.index')->with('success', 'Car was deleted!');
     }
     public function search(Request $request)
     {
@@ -190,13 +203,12 @@ class CarController extends Controller
 
     public function watchlist()
     {
-        // TODO Make real user finding
-        $cars = User::find(4)->favouriteCars()
+        $cars = Auth::user()
+        ->favouriteCars()
         ->with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage'])
         ->paginate(15);
 
         return view('car.watchlist', ['cars' => $cars]);
-
     }
 
     public function carImages(Car $car)
@@ -206,6 +218,10 @@ class CarController extends Controller
 
     public function updateImages(Request $request, Car $car)
     {
+        if ($car->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $data = request()->validate([
             'delete_images' => 'array',
             'delete_images.*' => 'integer',
@@ -230,11 +246,15 @@ class CarController extends Controller
             $car->images()->where('id', $id)->update(['position' => $position]);
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Car images were updated!');
     }
 
     public function addImages(Request $request, Car $car)
     {
+        if ($car->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         // Get images from request
         $images = $request->file('images') ?? [];
 
@@ -253,7 +273,7 @@ class CarController extends Controller
             $position++;
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'New images were added!');
     }
 
 }
