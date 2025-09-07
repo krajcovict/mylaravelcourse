@@ -21,7 +21,7 @@ class HomeController extends Controller
 
         session(['user' => 'John']); */
 
-        $cars = Car::with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage'])
+        $cars = Car::with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage', 'favouredUsers'])
             ->where('published_at', '<', now())
             ->orderBy('published_at','desc')
             ->limit(30)

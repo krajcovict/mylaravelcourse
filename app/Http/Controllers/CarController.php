@@ -151,7 +151,7 @@ class CarController extends Controller
 
 
         $query = Car::where('published_at', '<', now())
-            ->with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage']);
+            ->with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage', 'favouredUsers']);
 
         if ($maker) {
             $query->where('maker_id', $maker);
@@ -199,16 +199,6 @@ class CarController extends Controller
         ->withQueryString();
 
         return view('car.search', ['cars' => $cars]);
-    }
-
-    public function watchlist()
-    {
-        $cars = Auth::user()
-        ->favouriteCars()
-        ->with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage'])
-        ->paginate(15);
-
-        return view('car.watchlist', ['cars' => $cars]);
     }
 
     public function carImages(Car $car)

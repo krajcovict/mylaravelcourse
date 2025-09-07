@@ -24,7 +24,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             return redirect()->intended(route('home'))
-            ->with('success', 'Welcome');
+            ->with('success', 'Welcome, '.Auth::user()->name);
         }
         return redirect()->back()->withErrors([
             'email' => 'The provided credentials do not match our records.'
