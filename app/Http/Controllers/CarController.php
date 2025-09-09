@@ -33,7 +33,9 @@ class CarController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', Car::class);
+        if (!Gate::allows('create', Car::class)) {
+            return redirect()->route('profile.index')->with('warning', 'Please provide your phone number before adding new car.');
+        }
         return view('car.create');
     }
 
@@ -42,7 +44,9 @@ class CarController extends Controller
      */
     public function store(StoreCarRequest $request)
     {
-        Gate::authorize('create', Car::class);
+        if (!Gate::allows('create', Car::class)) {
+            return redirect()->route('profile.index')->with('warning', 'Please provide your phone number before adding new car.');
+        }
         $data = $request->validated();
 
         $featuresData = $data['features'] ?? [];
@@ -259,6 +263,10 @@ class CarController extends Controller
         }
 
         return redirect()->back()->with('success', 'New images were added!');
+    }
+
+    public function showPhone (Car $car) {
+        return response()->json(['phone' => $car->phone]);
     }
 
 }

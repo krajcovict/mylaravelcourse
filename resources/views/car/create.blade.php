@@ -84,9 +84,12 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <div class="form-group">
+                  <div class="form-group @error('state_id') has-error @enderror">
                     <label>State/Region</label>
                     <x-select-state :value="old('state_id')"/>
+                    <p class="error-message">
+                        {{ $errors->first('state_id') }}
+                    </p>
                   </div>
                 </div>
                 <div class="col">

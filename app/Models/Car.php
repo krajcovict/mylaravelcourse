@@ -96,4 +96,9 @@ class Car extends Model
         return $this->year . ' - ' . $this->maker->name . ' ' . $this->model->name;
     }
 
+    public function isInWatchlist(?User $user)
+    {
+        return $this->favouredUsers->contains($user);
+    }
+
 }

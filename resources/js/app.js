@@ -241,8 +241,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert(response.data.message)
                 })
                 .catch(error => {
-                  alert("Internal Server Error. Please Try again later!")
+                    console.error(error.response)
+                    if (error?.response?.status === 401) {
+                        alert("Please login first to add cars into watchlist.")
+                    } else {
+                        alert("Internal Server Error. Please Try again later!")
+                    }
                 })
+            })
+        })
+    }
+
+    const initShowPhoneNumber = () => {
+        const span = document.querySelector('.car-details-phone-view');
+
+        span.addEventListener('click', ev => {
+            ev.preventDefault();
+            const url = span.dataset.url;
+
+            axios.post(url).then(response => {
+                const phone = response.data.phone;
+                const a = span.parentElement;
+                a.href = 'tel:' + phone;
+                const phoneEl = a.querySelector('.text-phone');
+                phoneEl.innerText = phone;
             })
         })
     }
@@ -256,6 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initCascadingDropdown('#stateSelect', '#citySelect');
     initSortingDropdown();
     initAddToWatchlist();
+    initShowPhoneNumber();
 
   ScrollReveal().reveal(".hero-slide.active .hero-slider-title", {
     delay: 200,
