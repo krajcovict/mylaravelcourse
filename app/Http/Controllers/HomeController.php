@@ -11,22 +11,19 @@ use App\Models\Model;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        /* $user = $request->session()->get('user');
-        $user2 = $session('user');
-
-        session(['user' => 'John']); */
-
-        $cars = Car::with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage', 'favouredUsers'])
-            ->where('published_at', '<', now())
+        $cars = Cache::remember('home-cars', 75, function(){
+            return Car::where('published_at', '<', now())
+            ->with(['city', 'carType', 'fuelType', 'maker', 'model', 'primaryImage', 'favouredUsers'])
             ->orderBy('published_at','desc')
             ->limit(30)
             ->get();
-
+        });
         return view('home.index', ['cars' => $cars]);
     }
 }
